@@ -6,19 +6,26 @@ version = 4
 name = "Weather-Station-Embassy"
 version = "0.1.0"
 dependencies = [
+ "as5600",
  "critical-section",
+ "dht-sensor",
  "embassy-executor",
  "embassy-net",
+ "embassy-sync 0.7.2",
  "embassy-time",
  "embedded-io 0.7.1",
  "embedded-io-async 0.7.0",
  "esp-alloc",
+ "esp-backtrace",
  "esp-bootloader-esp-idf",
  "esp-hal",
  "esp-println",
  "esp-radio",
  "esp-rtos",
+ "heapless 0.9.1",
+ "ina219",
  "log",
+ "rust-mqtt",
  "smoltcp",
  "static_cell",
 ]
@@ -34,6 +41,18 @@ name = "anyhow"
 version = "1.0.100"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "a23eb6b1614318a8071c9b2521f36b424b2c83db5eb3a0fead4a6c0809af6e61"
+
+[[package]]
+name = "as5600"
+version = "0.8.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "5fdbe60b23e3ae22f4618c03b63aa884c4ca641830880f9d64b770d6467b4b7f"
+dependencies = [
+ "embedded-hal 1.0.0",
+ "embedded-hal-async",
+ "num-derive",
+ "num-traits",
+]
 
 [[package]]
 name = "autocfg"
@@ -64,7 +83,7 @@ checksum = "6115af052c7914c0cbb97195e5c72cb61c511527250074f5c041d1048b0d8b16"
 dependencies = [
  "proc-macro2",
  "quote",
- "syn 2.0.107",
+ "syn 2.0.108",
 ]
 
 [[package]]
@@ -168,7 +187,7 @@ dependencies = [
  "proc-macro2",
  "quote",
  "strsim",
- "syn 2.0.107",
+ "syn 2.0.108",
 ]
 
 [[package]]
@@ -181,7 +200,7 @@ dependencies = [
  "ident_case",
  "proc-macro2",
  "quote",
- "syn 2.0.107",
+ "syn 2.0.108",
 ]
 
 [[package]]
@@ -192,7 +211,7 @@ checksum = "fc34b93ccb385b40dc71c6fceac4b2ad23662c7eeb248cf10d529b7e055b6ead"
 dependencies = [
  "darling_core 0.20.11",
  "quote",
- "syn 2.0.107",
+ "syn 2.0.108",
 ]
 
 [[package]]
@@ -203,7 +222,48 @@ checksum = "d38308df82d1080de0afee5d069fa14b0326a88c14f15c5ccda35b4a6c414c81"
 dependencies = [
  "darling_core 0.21.3",
  "quote",
- "syn 2.0.107",
+ "syn 2.0.108",
+]
+
+[[package]]
+name = "defmt"
+version = "0.3.100"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "f0963443817029b2024136fc4dd07a5107eb8f977eaf18fcd1fdeb11306b64ad"
+dependencies = [
+ "defmt 1.0.1",
+]
+
+[[package]]
+name = "defmt"
+version = "1.0.1"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "548d977b6da32fa1d1fda2876453da1e7df63ad0304c8b3dae4dbe7b96f39b78"
+dependencies = [
+ "bitflags 1.3.2",
+ "defmt-macros",
+]
+
+[[package]]
+name = "defmt-macros"
+version = "1.0.1"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "3d4fc12a85bcf441cfe44344c4b72d58493178ce635338a3f3b78943aceb258e"
+dependencies = [
+ "defmt-parser",
+ "proc-macro-error2",
+ "proc-macro2",
+ "quote",
+ "syn 2.0.108",
+]
+
+[[package]]
+name = "defmt-parser"
+version = "1.0.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "10d60334b3b2e7c9d91ef8150abfb6fa4c1c39ebbcf4a81c2e346aad939fee3e"
+dependencies = [
+ "thiserror",
 ]
 
 [[package]]
@@ -214,7 +274,16 @@ checksum = "6178a82cf56c836a3ba61a7935cdb1c49bfaa6fa4327cd5bf554a503087de26b"
 dependencies = [
  "proc-macro2",
  "quote",
- "syn 2.0.107",
+ "syn 2.0.108",
+]
+
+[[package]]
+name = "dht-sensor"
+version = "0.2.1"
+source = "git+https://github.com/michaelbeaumont/dht-sensor.git?branch=main#10319bdeae9ace3bb0fc79a15da2869c5bf50f52"
+dependencies = [
+ "embedded-hal 1.0.0",
+ "embedded-hal-async",
 ]
 
 [[package]]
@@ -275,7 +344,7 @@ dependencies = [
  "darling 0.20.11",
  "proc-macro2",
  "quote",
- "syn 2.0.107",
+ "syn 2.0.108",
 ]
 
 [[package]]
@@ -503,7 +572,7 @@ dependencies = [
  "darling 0.21.3",
  "proc-macro2",
  "quote",
- "syn 2.0.107",
+ "syn 2.0.108",
 ]
 
 [[package]]
@@ -526,6 +595,23 @@ dependencies = [
  "esp-sync",
  "linked_list_allocator",
  "rlsf",
+]
+
+[[package]]
+name = "esp-backtrace"
+version = "0.18.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "fdd8a541e17aa485d82df547f03c77b89f78cb110f59dea67cc90733d67e3678"
+dependencies = [
+ "cfg-if",
+ "document-features",
+ "esp-config",
+ "esp-metadata-generated",
+ "esp-println",
+ "heapless 0.9.1",
+ "riscv",
+ "semihosting",
+ "xtensa-lx",
 ]
 
 [[package]]
@@ -621,7 +707,7 @@ dependencies = [
  "proc-macro-crate",
  "proc-macro2",
  "quote",
- "syn 2.0.107",
+ "syn 2.0.108",
  "termcolor",
 ]
 
@@ -951,6 +1037,16 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "b9e0384b61958566e926dc50660321d12159025e767c18e043daf26b70104c39"
 
 [[package]]
+name = "ina219"
+version = "0.2.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "457a68120d2d0f0ca1b5c7f8e0ff3f77db9e34b1076a4e82f7097cbde7d2aaa4"
+dependencies = [
+ "embedded-hal 1.0.0",
+ "embedded-hal-async",
+]
+
+[[package]]
 name = "indexmap"
 version = "2.12.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -979,7 +1075,7 @@ dependencies = [
  "indoc",
  "proc-macro2",
  "quote",
- "syn 2.0.107",
+ "syn 2.0.108",
 ]
 
 [[package]]
@@ -1009,7 +1105,7 @@ checksum = "03343451ff899767262ec32146f6d559dd759fdadf42ff0e227c7c48f72594b4"
 dependencies = [
  "proc-macro2",
  "quote",
- "syn 2.0.107",
+ "syn 2.0.108",
 ]
 
 [[package]]
@@ -1071,7 +1167,7 @@ checksum = "ed3955f1a9c7c0c15e092f9c887db08b1fc683305fdf6eb6684f22555355e202"
 dependencies = [
  "proc-macro2",
  "quote",
- "syn 2.0.107",
+ "syn 2.0.108",
 ]
 
 [[package]]
@@ -1134,7 +1230,7 @@ checksum = "a33fa6ec7f2047f572d49317cca19c87195de99c6e5b6ee492da701cfe02b053"
 dependencies = [
  "proc-macro2",
  "quote",
- "syn 2.0.107",
+ "syn 2.0.108",
 ]
 
 [[package]]
@@ -1147,10 +1243,32 @@ dependencies = [
 ]
 
 [[package]]
-name = "proc-macro2"
-version = "1.0.101"
+name = "proc-macro-error-attr2"
+version = "2.0.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "89ae43fd86e4158d6db51ad8e2b80f313af9cc74f5c0e03ccb87de09998732de"
+checksum = "96de42df36bb9bba5542fe9f1a054b8cc87e172759a1868aa05c1f3acc89dfc5"
+dependencies = [
+ "proc-macro2",
+ "quote",
+]
+
+[[package]]
+name = "proc-macro-error2"
+version = "2.0.1"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "11ec05c52be0a07b08061f7dd003e7d7092e0472bc731b4af7bb1ef876109802"
+dependencies = [
+ "proc-macro-error-attr2",
+ "proc-macro2",
+ "quote",
+ "syn 2.0.108",
+]
+
+[[package]]
+name = "proc-macro2"
+version = "1.0.102"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "8e0f6df8eaa422d97d72edcd152e1451618fed47fabbdbd5a8864167b1d4aff7"
 dependencies = [
  "unicode-ident",
 ]
@@ -1197,7 +1315,7 @@ checksum = "7d323d13972c1b104aa036bc692cd08b822c8bbf23d79a27c526095856499799"
 dependencies = [
  "proc-macro2",
  "quote",
- "syn 2.0.107",
+ "syn 2.0.108",
 ]
 
 [[package]]
@@ -1226,7 +1344,7 @@ checksum = "15c3138fdd8d128b2d81829842a3e0ce771b3712f7b6318ed1476b0695e7d330"
 dependencies = [
  "proc-macro2",
  "quote",
- "syn 2.0.107",
+ "syn 2.0.108",
 ]
 
 [[package]]
@@ -1248,6 +1366,20 @@ dependencies = [
 ]
 
 [[package]]
+name = "rust-mqtt"
+version = "0.3.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "8f71160765f368fd9a84e0955e2ddb6d64ac9018fee1c5323354d6d08c816b40"
+dependencies = [
+ "defmt 0.3.100",
+ "embedded-io 0.6.1",
+ "embedded-io-async 0.6.1",
+ "heapless 0.8.0",
+ "log",
+ "rand_core 0.6.4",
+]
+
+[[package]]
 name = "rustversion"
 version = "1.0.22"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -1258,6 +1390,12 @@ name = "ryu"
 version = "1.0.20"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "28d3b2b1366ec20994f1fd18c3c594f05c5dd4bc44d8bb0c1c632c8d6829481f"
+
+[[package]]
+name = "semihosting"
+version = "0.1.20"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "c3e1c7d2b77d80283c750a39c52f1ab4d17234e8f30bca43550f5b2375f41d5f"
 
 [[package]]
 name = "serde"
@@ -1286,7 +1424,7 @@ checksum = "d540f220d3187173da220f885ab66608367b6574e925011a9353e4badda91d79"
 dependencies = [
  "proc-macro2",
  "quote",
- "syn 2.0.107",
+ "syn 2.0.108",
 ]
 
 [[package]]
@@ -1392,7 +1530,7 @@ dependencies = [
  "heck",
  "proc-macro2",
  "quote",
- "syn 2.0.107",
+ "syn 2.0.108",
 ]
 
 [[package]]
@@ -1421,9 +1559,9 @@ dependencies = [
 
 [[package]]
 name = "syn"
-version = "2.0.107"
+version = "2.0.108"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "2a26dbd934e5451d21ef060c018dae56fc073894c5a7896f882928a76e6d081b"
+checksum = "da58917d35242480a05c2897064da0a80589a2a0476c9a3f2fdc83b53502e917"
 dependencies = [
  "proc-macro2",
  "quote",
@@ -1437,6 +1575,26 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "06794f8f6c5c898b3275aebefa6b8a1cb24cd2c6c79397ab15774837a0bc5755"
 dependencies = [
  "winapi-util",
+]
+
+[[package]]
+name = "thiserror"
+version = "2.0.17"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "f63587ca0f12b72a0600bcba1d40081f830876000bb46dd2337a3051618f4fc8"
+dependencies = [
+ "thiserror-impl",
+]
+
+[[package]]
+name = "thiserror-impl"
+version = "2.0.17"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "3ff15c8ecd7de3849db632e14d18d2571fa09dfc5ed93479bc4485c7a517c913"
+dependencies = [
+ "proc-macro2",
+ "quote",
+ "syn 2.0.108",
 ]
 
 [[package]]
@@ -1578,5 +1736,5 @@ checksum = "96fb42cd29c42f8744c74276e9f5bee7b06685bbe5b88df891516d72cb320450"
 dependencies = [
  "proc-macro2",
  "quote",
- "syn 2.0.107",
+ "syn 2.0.108",
 ]

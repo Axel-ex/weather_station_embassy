@@ -6,7 +6,10 @@ version      = "0.1.0"
 
 [[bin]]
 name = "Weather-Station-Embassy"
-path = "./src/bin/main.rs"
+path = "./src/main.rs"
+test = false
+doctest = false
+bench = false
 
 [dependencies]
 esp-hal = { version = "=1.0.0-rc.1", features = [
@@ -64,7 +67,14 @@ smoltcp = { version = "0.12.0", default-features = false, features = [
 
 critical-section = "1.2.0"
 static_cell      = "2.1.1"
-
+embassy-sync = "0.7.2"
+esp-backtrace = { version = "0.18.0", features = ["esp32", "println", "panic-handler"]}
+heapless = "0.9.1"
+rust-mqtt= { version = "0.3.0", features = ["no_std"]}
+dht-sensor = { git = "https://github.com/michaelbeaumont/dht-sensor.git", branch = "main", features = ["async"] }
+# toml-config = "0.4.0"
+ina219 = { version = "0.2.0", features = ["async"]}
+as5600 = { version = "0.8.0" , features = ["async"]}
 
 [profile.dev]
 # Rust debug is too slow.
